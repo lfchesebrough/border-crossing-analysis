@@ -61,7 +61,7 @@ def main(input_path, output_path):
     writer.writeheader()
     for row in sorted(
         final,
-        key=lambda x: (x["Date"], x["Value"], x["Measure"], x["Border"]),
+        key=lambda x: (datetime.datetime.strptime(x["Date"], "%m/%d/%Y %H:%M:%S %p"), x["Value"], x["Measure"], x["Border"]),
         reverse=True):
       writer.writerow(row)
 
