@@ -16,7 +16,8 @@ def parse_datetime(string):
 def main(input_path, output_path):
   with open(input_path) as f:
     reader = csv.DictReader(f)
-
+    
+    # Create a dict mapping border-measure groups to date-value pairs
     tmp = {}
     for row in reader:
       key = (row["Border"], row["Measure"])
@@ -25,7 +26,8 @@ def main(input_path, output_path):
         tmp[key] = [val]
       else:
         tmp[key].append(val)
-
+        
+  # aggregate the date-values within each group
   out = {}
   for group, data in tmp.iteritems():
     count, running_sum = 0, 0
@@ -40,7 +42,8 @@ def main(input_path, output_path):
         out[key] = (out[key][0] + value, out[key][1])
 
       running_sum += value
-
+  
+  # reformat data for writing
   final = []
   for key, val in out.iteritems():
     final.append({
@@ -50,7 +53,8 @@ def main(input_path, output_path):
         "Value": val[0],
         "Average": val[1],
     })
-      
+  
+  # write data with sorting as defined by challenge prompt
   with open(output_path, "w") as o:
     writer = csv.DictWriter(
         o, fieldnames=["Border", "Date", "Measure", "Value", "Average"])
